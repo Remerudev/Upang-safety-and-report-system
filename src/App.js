@@ -1,5 +1,5 @@
 import React from 'react';
-import Landing from './pages/SignIn.jsx'; {/*Change this nalang if kung gusto niyo makita other pages ex. pages/Landing.jsx*/}
+import Landing from './pages/ReportIncident.jsx'; {/*Change this nalang if kung gusto niyo makita other pages ex. pages/Landing.jsx*/}
 
 function App() {
   return (

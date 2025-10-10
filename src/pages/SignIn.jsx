@@ -3,16 +3,10 @@ import { FaUser, FaEyeSlash } from 'react-icons/fa';
 
 export default function SignIn() {
   return (
-    <div className="min-h-screen bg-white flex">
-      <div className="w-full lg:w-1/2 bg-gray-50 p-8 flex flex-col justify-center items-center relative overflow-hidden">
-        <div 
-          className="absolute inset-0 bg-cover bg-center opacity-30"
-          style={{
-            backgroundImage: "url('/images/decorative-shapes.png')",
-          }}
-        ></div>
-
-        <div className="relative z-10 text-center max-w-md">
+    <div className="min-h-screen bg-white flex relative">
+      
+      <div className="w-full lg:w-1/2 bg-gray-50 p-8 flex flex-col justify-center items-center relative z-10">
+        <div className="text-center max-w-md">
           <img
             src="/images/upang-logo.png"
             alt="UPANG Logo"
@@ -25,20 +19,21 @@ export default function SignIn() {
         </div>
       </div>
 
-      <div className="w-full lg:w-1/2 flex items-center justify-center p-8">
-        <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
-          <div className="flex items-center mb-6">
-            <img
-              src="/images/phinma-logo.png"
-              alt="PHINMA Education"
-              className="h-10 mr-4"
-            />
-            <div>
-              <h3 className="font-bold text-gray-800 text-sm">PHINMA EDUCATION</h3>
-              <p className="text-xs text-gray-600">MAKING LIVES BETTER THROUGH EDUCATION</p>
-            </div>
+      <div className="w-full lg:w-1/2 flex flex-col items-center justify-start p-8 relative">
+        <div className="flex items-center mb-8 w-full max-w-md">
+          <img
+            src="/images/phinma-logo.png"
+            alt="PHINMA Education"
+            className="h-24 mr-8"
+          />
+          <div>
+            <h3 className="font-bold text-gray-800 text-sm">PHINMA EDUCATION</h3>
+            <p className="text-xs text-gray-600">MAKING LIVES BETTER THROUGH EDUCATION</p>
           </div>
+        </div>
 
+        {/* sign in box  */}
+        <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
           <h2 className="text-xl font-bold text-gray-800 mb-6 border-b-2 border-green-600 pb-2">Sign In</h2>
 
           <div className="mb-4">
