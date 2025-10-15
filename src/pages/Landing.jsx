@@ -1,23 +1,71 @@
 import React from 'react';
 import { FaCheckCircle, FaClock, FaUsers, FaShieldAlt, FaExclamationTriangle, FaMapMarkerAlt, FaChartLine, FaFileAlt, FaChartBar } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 
-export default function Landing() {
+export default function Landing({ isAuthenticated, setIsAuthenticated }) {
+  const navigate = useNavigate();
+
+  const handleSignIn = () => {
+    navigate('/signin');
+  };
+
   return (
     <div className="min-h-screen bg-white">
-      <header className='bg-white shadow-sm sticky top-0 z-50'>
-        <div className='container mx-auto px-4 py-3 flex justify-between items-center'>
-            <div className='flex items-center space-x-2'>
-                <img src='/images/upang-logo.png' alt='UPANG Logo' className='h-10 w-10 rounded-full'/>
-                <h1 className='text-xl font-bold text-green-800'>UPANG Safety</h1>
-            </div>
-            <div className='flex space-x-6'>
-                <button className='text-grey-700 hover:text-green-600 font-medium'>Report Incident</button>
-                <button className='text-grey-700 hover:text-green-600 font-medium'>Track Reports</button>
-                <button className='text-grey-700 hover:text-green-600 font-medium'>Report Incident</button>
-                <button className='bg-green-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-green-700 transition shadow-sm'>Sign In</button>
-            </div>
-        </div>
-      </header>
+    <header className='bg-white shadow-sm sticky top-0 z-50'>
+      <div className='container mx-auto px-4 py-3 flex justify-between items-center'>
+        <div className='flex items-center space-x-2'>
+          <img src='/images/upang-logo.png' alt='UPANG Logo' className='h-10 w-10 rounded-full'/>
+        <h1 className='text-xl font-bold text-green-800'>UPANG Safety</h1>
+      </div>
+      <div className='flex space-x-6'>
+        <button 
+          onClick={() => {
+            if (isAuthenticated) {
+              window.location.href = '/report'; // if si user naka sign in, direct to report page
+            } else {
+              window.location.href = '/signin'; // if hindi pa naka sign in, direct to sign in page
+            }
+          }}
+          className='text-grey-700 hover:text-green-600 font-medium'
+        >
+          Report Incident
+        </button>
+
+        <button 
+          onClick={() => {
+            if (isAuthenticated) {
+              window.location.href = '/dashboard'; // same with this one
+            } else {
+              window.location.href = '/signin';
+            }
+          }}
+          className='text-grey-700 hover:text-green-600 font-medium'
+        >
+          Track Reports
+        </button>
+
+        <button 
+          onClick={() => {
+            if (isAuthenticated) {
+              window.location.href = '/dashboard'; // same
+            } else {
+              window.location.href = '/signin';
+            }
+          }}
+          className='text-grey-700 hover:text-green-600 font-medium'
+        >
+          Profile
+        </button>
+
+        <button 
+          onClick={() => window.location.href = '/signin'}
+          className='bg-green-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-green-700 transition shadow-sm'
+        >
+          Sign In
+        </button>
+      </div>
+    </div>
+  </header>
 
     <section className='relative bg-cover bg-center h-[60vh] flex items-center justify-center text-white'
         style={{backgroundImage: "url('/images/upang-bg.png')",}}

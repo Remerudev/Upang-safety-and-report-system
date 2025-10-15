@@ -1,9 +1,16 @@
 import React from 'react';
 import { FaFileAlt, FaClock, FaCheck } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 import StatCard from '../components/StatCard';
 import ReportCard from '../components/ReportCard';
 
-export default function Dashboard() {
+export default function UserDashboard() {
+  const navigate = useNavigate();
+
+   const handleNewReport = () => {
+    navigate('/report');
+  };
+  
   return (
     <div className="min-h-screen bg-gray-50">
       <header className="bg-white shadow-sm sticky top-0 z-50">
@@ -19,7 +26,8 @@ export default function Dashboard() {
           <div className="flex flex-wrap justify-start sm:justify-end gap-6 w-full sm:w-auto">
             <button className="text-gray-700 hover:text-green-600 font-medium">Track Reports</button>
             <button className="text-gray-700 hover:text-green-600 font-medium">Profile</button>
-            <button className="bg-green-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-green-700 transition shadow-sm">+ New Report</button>
+            <button onClick={handleNewReport} className="bg-green-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-green-700 transition shadow-sm">
+              + New Report</button>
           </div>
         </div>
       </header>
