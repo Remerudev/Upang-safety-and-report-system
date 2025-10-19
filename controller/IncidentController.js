@@ -149,6 +149,43 @@ exports.getAllPendingIncidents = async (req, res) => {
     });
   }
 };
+//ADMIN: get all under review reports
+exports.getAllUnderReviewIncidents = async (req, res) => {
+  try {
+    const incidents = await Incident.find({ status: 'Under Review' }).sort({ createdAt: -1 });
+    res.status(200).json({
+      success: true,
+      count: incidents.length,
+      data: incidents
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: 'Error fetching under review reports',
+      error: error.message
+    });
+  }
+};
+
+//admin: get all resolved reports
+exports.getAllResolvedIncidents = async (req, res) => {
+  try {
+    const incidents = await Incident.find({ status: 'Resolved' }).sort({ createdAt: -1 });
+    res.status(200).json({
+      success: true,
+      count: incidents.length,
+      data: incidents
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: 'Error fetching resolved reports',
+      error: error.message
+    });
+  }
+}; 
 
 //ADMIN: Get reports by status (Pending, Under Review, Resolved)
 exports.getIncidentsByStatus = async (req, res) => {
@@ -180,6 +217,7 @@ exports.getIncidentsByStatus = async (req, res) => {
     });
   }
 };
+
 
 //ADMIN: Get report by ID
 exports.getIncidentById = async (req, res) => {
