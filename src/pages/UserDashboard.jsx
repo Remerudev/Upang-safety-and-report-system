@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaFileAlt, FaClock, FaCheck } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import StatCard from '../components/StatCard';
@@ -6,11 +6,39 @@ import ReportCard from '../components/ReportCard';
 
 export default function UserDashboard() {
   const navigate = useNavigate();
+  const [incidents, setIncidents] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-   const handleNewReport = () => {
+  const handleNewReport = () => {
     navigate('/report');
   };
-  
+
+  useEffect(() => {
+    const fetchIncidents = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch('http://localhost:5000/Incidents');
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        setIncidents(data);
+      } catch (err) {
+        console.error('Failed to fetch incidents:', err);
+        setError('Failed to load reports. Please try again later.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchIncidents();
+  }, []);
+
+  const totalReports = incidents.length;
+  const pendingReports = incidents.filter(i => i.status === 'Pending').length;
+  const resolvedReports = incidents.filter(i => i.status === 'Resolved').length;
+
   return (
     <div className="min-h-screen bg-gray-50">
       <header className="bg-white shadow-sm sticky top-0 z-50">
@@ -24,10 +52,14 @@ export default function UserDashboard() {
             <h1 className="text-xl font-bold text-gray-800">UPANG Safety</h1>
           </div>
           <div className="flex flex-wrap justify-start sm:justify-end gap-6 w-full sm:w-auto">
-            <button className="text-gray-700 hover:text-green-600 font-medium">Track Reports</button>
+            <button onClick={() => navigate ('/track-reports')} className="text-gray-700 hover:text-green-600 font-medium">Track Reports</button>
             <button className="text-gray-700 hover:text-green-600 font-medium">Profile</button>
-            <button onClick={handleNewReport} className="bg-green-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-green-700 transition shadow-sm">
-              + New Report</button>
+            <button 
+              onClick={handleNewReport} 
+              className="bg-green-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-green-700 transition shadow-sm"
+            >
+              + New Report
+            </button>
           </div>
         </div>
       </header>
@@ -42,51 +74,53 @@ export default function UserDashboard() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <StatCard 
             title="Total Reports" 
-            value="15" 
+            value={totalReports} 
             icon={<FaFileAlt className="text-gray-500" />} 
           />
           <StatCard 
             title="Pending Reports" 
-            value="10" 
+            value={pendingReports} 
             valueColor="text-yellow-500" 
             icon={<FaClock className="text-yellow-500" />} 
           />
           <StatCard 
             title="Resolved" 
-            value="5" 
+            value={resolvedReports} 
             valueColor="text-green-500" 
             icon={<FaCheck className="text-green-500" />} 
           />
         </div>
 
-        {/* my Reports Section */}
+        {/* My Reports Section */}
         <div className="bg-white p-6 rounded-lg shadow">
           <h2 className="text-xl font-bold text-gray-800 mb-2">My Reports</h2>
           <p className="text-gray-600 mb-6">View and track all your submitted reports</p>
 
-          <div className="space-y-4">
-            <ReportCard 
-              title="Broken Window in Library" 
-              location="Main Library, 2nd Floor" 
-              date="2024-01-15" 
-              status="Reported" 
-              statusColor="bg-gray-700" 
-            />
-            <ReportCard 
-              title="Harassment Incident" 
-              location="Student Cafeteria" 
-              date="2024-01-14" 
-              status="Pending" 
-              statusColor="bg-yellow-500" 
-            />
-            <ReportCard 
-              title="Slip and Fall" 
-              location="Main Hallway" 
-              date="2024-01-12" 
-              status="Under Review" 
-              statusColor="bg-green-600" 
-            />
-          </div>
+          {loading ? (
+            <p className="text-gray-500">Loading reports...</p>
+          ) : error ? (
+            <p className="text-red-500">{error}</p>
+          ) : incidents.length === 0 ? (
+            <p className="text-gray-500">No reports submitted yet.</p>
+          ) : (
+            <div className="space-y-4">
+              {incidents.map((incident) => (
+                <ReportCard
+                  key={incident._id}
+                  title={incident.title}
+                  location={incident.location}
+                  date={incident.date ? new Date(incident.date).toLocaleDateString() : 'N/A'}
+                  status={incident.status || 'Reported'}
+                  statusColor={
+                    incident.status === 'Resolved' ? 'bg-green-600' :
+                    incident.status === 'Pending' ? 'bg-yellow-500' :
+                    incident.status === 'Submitted' ? 'bg-gray-800' :
+                    'bg-gray-700'
+                  }
+                />
+              ))}
+            </div>
+          )}
         </div>
       </main>
     </div>

@@ -4,17 +4,24 @@ import SignIn from './pages/SignIn';
 import UserDashboard from './pages/UserDashboard';
 import ReportIncident from './pages/ReportIncident';
 import LandingPage from './pages/Landing';
+import TrackReports from './pages/TrackReports';
+import { UserProvider } from './UserContext';
+import ProtectedRoute from './components/ProtectedRoute';
 
 export default function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [userEmail, setUserEmail] = useState('');
   return (
     <Router>
+      <UserProvider value={{ userEmail, setUserEmail }}>
       <Routes>
         <Route path='/' element={<LandingPage isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} />} />
-        <Route path="/signin" element={<SignIn setIsAuthenticated={setIsAuthenticated} />} />
-        <Route path="/dashboard" element={isAuthenticated ? <UserDashboard/> : <LandingPage isAuthenticated={false} setIsAuthenticated={setIsAuthenticated} />} />
-        <Route path="/report" element={isAuthenticated ? <ReportIncident /> : <LandingPage isAuthenticated={false} setIsAuthenticated={setIsAuthenticated} />} />
+        <Route path="/signin" element={<SignIn setIsAuthenticated={setIsAuthenticated} setUserEmail={setUserEmail} />} />
+        <Route path="/dashboard" element={isAuthenticated ? <UserDashboard userEmail={userEmail} /> : <LandingPage isAuthenticated={false} setIsAuthenticated={setIsAuthenticated} />} />
+        <Route path="/report" element={isAuthenticated ? <ReportIncident userEmail={userEmail} /> : <LandingPage isAuthenticated={false} setIsAuthenticated={setIsAuthenticated} />} />\
+        <Route path="/track-reports" element={<ProtectedRoute isAuthenticated={isAuthenticated}><TrackReports/></ProtectedRoute>} />
       </Routes>
+      </UserProvider>
     </Router>
   );
 }
