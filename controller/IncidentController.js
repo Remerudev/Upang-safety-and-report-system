@@ -1,4 +1,6 @@
 const Incident = require('../model/IncidentModel');
+const path = require('path');
+const fs = require('fs');
 
 //USER: Create report
 exports.createIncident = async (req, res) => {
@@ -7,22 +9,23 @@ exports.createIncident = async (req, res) => {
 
     //required fields validation
     if (!title || !description || !location || !date || !category || !userEmail || !userName) {
-      return res.status(400).json({ 
+      return res.status(400).json({
         success: false,
-        message: 'Please provide all required fields: title, description, location, date, category, userEmail, userName' 
+        message: 'Please provide all required fields'
       });
     }
 
     //for photo evidence
-    let photoEvidence = [];
-    if (req.files && req.files.length > 0) {
-      photoEvidence = req.files.map(file => ({
-        filename: file.filename,
-        path: file.path
-      }));
+    let photoEvidence = null;
+    if (req.file) { 
+      const uploadDir = path.join(__dirname, '..', 'uploads', 'incidents');
+      if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
+      
+      
+      const uploadPath = path.join(uploadDir, 'incident-' + Date.now() + "-" + req.file.originalname);
+      fs.writeFileSync(uploadPath, req.file.buffer);
+      photoEvidence = uploadPath; 
     }
-
-    // Create new incident report
     const newIncident = await Incident.create({
       userEmail,
       userName,
@@ -33,7 +36,7 @@ exports.createIncident = async (req, res) => {
       status: 'Pending',
       category,
       priority: priority || 'low',
-      photoEvidence,
+      photoEvidence, // FIXED: Now defined
       notifications: [{
         status: 'Pending',
         message: 'Your report has been submitted successfully'
@@ -47,10 +50,10 @@ exports.createIncident = async (req, res) => {
     });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ 
+    res.status(500).json({
       success: false,
       message: 'Error creating report',
-      error: error.message 
+      error: error.message
     });
   }
 };
@@ -243,10 +246,11 @@ exports.getIncidentById = async (req, res) => {
   }
 };
 
+
 //ADMIN: Update report status and notify user
 exports.updateIncident = async (req, res) => {
   try {
-    const { status, adminNotes } = req.body;
+    const { status } = req.body;
     
     const validStatuses = ['Pending', 'Under Review', 'Resolved'];
     if (status && !validStatuses.includes(status)) {

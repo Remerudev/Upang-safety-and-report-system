@@ -68,7 +68,7 @@ exports.getProfProfile = async (req, res) => {
   }
 };
 
-//update user profile
+//update Teacher profile
 exports.updateProfProfile = async (req, res) => {
   try {
     const updates = req.body;

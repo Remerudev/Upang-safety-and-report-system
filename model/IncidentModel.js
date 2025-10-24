@@ -9,7 +9,7 @@ const IncidentSchema = new mongoose.Schema({
     location: {type: String, required: [true, 'Please provide a location'], enum:['PTC Building', 'CHS Building', 'BASIC ED Building', 'Student Plaza',
       'Gym', 'Phinma Garden', 'CMA Building', 'FVR Building', 'MBA Building', 'River Side Building', 'NH Building', 'parking lot', 'others']},
     priority:{type: String, required: [true] , enum: ['low', 'medium', 'high'], default: 'low'},
-    Photoevidence: {type: [String]},
+    photoEvidence: [{  filename: String, path: String}],
     status:{type: String, default: 'Pending', enum: ['Pending', 'Under Review', 'Resolved']},
     createdAt: {type: Date, default: Date.now},
     date: {type: Date, required: true}

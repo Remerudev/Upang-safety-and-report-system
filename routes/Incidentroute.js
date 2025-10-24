@@ -1,9 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const IncidentController = require('../controller/IncidentController');
+const upload = require('../utils/upload');
 
 // User routes
-router.post("/user/report", IncidentController.createIncident); //user create report
+router.post("/user/report", upload.array('PhotoEvidence', 3), IncidentController.createIncident); //user create report
 router.get("/user/:userEmail/:id", IncidentController.getUserIncidentById); //user get their report by ID
 router.get("/user/:userEmail", IncidentController.getUserIncidents); //user get their reports
 
