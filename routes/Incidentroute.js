@@ -16,7 +16,8 @@ router.get("/admin/resolved", IncidentController.getAllResolvedIncidents); //adm
 
 // Generic admin routes AFTER specific ones
 router.get("/admin/:id", IncidentController.getIncidentById); //admin get report by ID
-router.put("/admin/:id", IncidentController.updateIncident); //admin update report status & notify user
+router.put("/admin/:id/assignedTeam", IncidentController.updateIncident); //admin update report status & notify user
 router.delete("/admin/:id", IncidentController.deleteIncident); //admin delete report
+
 
 module.exports = router;

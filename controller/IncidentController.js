@@ -247,11 +247,16 @@ exports.getIncidentById = async (req, res) => {
 };
 
 
-//ADMIN: Update report status and notify user
+// ADMIN: Update report status, assign team/staff, and notify user
 exports.updateIncident = async (req, res) => {
   try {
-    const { status } = req.body;
+    const { status, assignedTeam, assignedStaff, adminNotes } = req.body;
     
+    // ✅ Initialize variables
+    const updateData = {};
+    const notificationMessages = [];
+
+    // ✅ Validate status
     const validStatuses = ['Pending', 'Under Review', 'Resolved'];
     if (status && !validStatuses.includes(status)) {
       return res.status(400).json({ 
@@ -260,7 +265,36 @@ exports.updateIncident = async (req, res) => {
       });
     }
 
-    // Build notification message based on status
+    // ✅ Validate team
+    const validTeams = ['Security Team', 'Maintenance Team', 'IT Support', 'IClean', 'CSDL', 'Unassigned'];
+    if (assignedTeam && !validTeams.includes(assignedTeam)) {
+      return res.status(400).json({ 
+        success: false,
+        message: 'Invalid team assignment.' 
+      });
+    }
+
+    // ✅ Assign team if provided
+    if (assignedTeam) {
+      updateData.assignedTeam = assignedTeam;
+      if (assignedTeam !== 'Unassigned') {
+        notificationMessages.push(`Your report has been assigned to ${assignedTeam}.`);
+      }
+    }
+
+    // ✅ Add status updates
+    if (status) {
+      updateData.status = status;
+    }
+
+    if (adminNotes) {
+      updateData.adminNotes = adminNotes;
+    }
+
+    updateData.updatedAt = Date.now();
+    updateData.notified = true;
+
+    // Build notification message
     let notificationMessage = '';
     if (status === 'Under Review') {
       notificationMessage = 'Your report is now under review.';
@@ -268,13 +302,11 @@ exports.updateIncident = async (req, res) => {
       notificationMessage = 'Your report has been resolved.';
     }
 
+    //heto para ma execute yung update
     const incident = await Incident.findByIdAndUpdate(
       req.params.id,
       { 
-        status: status || req.body.status,
-        adminNotes: adminNotes || '',
-        updatedAt: Date.now(),
-        notified: true,
+        ...updateData,
         $push: {
           notifications: {
             status: status || 'Updated',
@@ -294,9 +326,10 @@ exports.updateIncident = async (req, res) => {
     
     res.status(200).json({
       success: true,
-      message: `Report status updated to "${status}" and user has been notified`,
+      message: `Report status updated and user has been notified.`,
       data: incident
     });
+
   } catch (error) {
     console.error(error);
     res.status(500).json({ 
@@ -306,6 +339,7 @@ exports.updateIncident = async (req, res) => {
     });
   }
 };
+
 
 //ADMIN: Delete report
 exports.deleteIncident = async (req, res) => {
