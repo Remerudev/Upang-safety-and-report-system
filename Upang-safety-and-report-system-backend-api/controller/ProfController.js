@@ -21,7 +21,7 @@ exports.signupProf = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
-
+////
 // Login user
 exports.loginProf = async (req, res) => {
   try {

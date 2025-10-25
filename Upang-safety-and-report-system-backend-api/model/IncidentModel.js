@@ -25,7 +25,7 @@ const IncidentSchema = new mongoose.Schema({
   status: { 
     type: String, 
     default: 'Submitted', 
-    enum: ['Submitted', 'Pending', 'In progress', 'Resolved'] 
+    enum: ['Submitted', 'Pending', 'Under Review', 'In progress', 'Resolved'] 
   },
   createdAt: { type: Date, default: Date.now },
 });

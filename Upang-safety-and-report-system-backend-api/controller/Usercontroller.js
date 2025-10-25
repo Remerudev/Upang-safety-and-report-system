@@ -50,10 +50,12 @@ exports.loginUser = async (req, res) => {
 //get all users
 exports.getAllUsers = async (req, res) => {
   try {
+    console.log(`UserController.getAllUsers invoked - requested by ${req.ip} origin=${req.headers.origin}`);
     const users = await User.find().select("-password");
     res.json(users);
 
   } catch (err) {
+    console.error('Error in getAllUsers:', err);
     res.status(500).json({ error: err.message });
   }
 };
