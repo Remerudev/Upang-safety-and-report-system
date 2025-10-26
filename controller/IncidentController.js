@@ -5,10 +5,10 @@ const fs = require('fs');
 //USER: Create report
 exports.createIncident = async (req, res) => {
   try {
-    const { title, description, location, date, category, priority, userEmail, userName } = req.body;
+    const { title, description, location, date, priority, userEmail, userName } = req.body;
 
     //required fields validation
-    if (!title || !description || !location || !date || !category || !userEmail || !userName) {
+    if (!title || !description || !location || !date  || !userEmail || !userName) {
       return res.status(400).json({
         success: false,
         message: 'Please provide all required fields'
@@ -34,7 +34,6 @@ exports.createIncident = async (req, res) => {
       location,
       date,
       status: 'Pending',
-      category,
       priority: priority || 'low',
       photoEvidence, // FIXED: Now defined
       notifications: [{
@@ -266,7 +265,7 @@ exports.updateIncident = async (req, res) => {
     }
 
     // ✅ Validate team
-    const validTeams = ['Security Team', 'Maintenance Team', 'IT Support', 'IClean', 'CSDL', 'Unassigned'];
+    const validTeams = [ 'Maintenance',  'IClean', 'Unassigned'];
     if (assignedTeam && !validTeams.includes(assignedTeam)) {
       return res.status(400).json({ 
         success: false,
