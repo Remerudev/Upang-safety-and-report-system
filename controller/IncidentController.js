@@ -339,7 +339,62 @@ exports.updateIncident = async (req, res) => {
   }
 };
 
+//ADMIN: get all low priority reports
+exports.getAllLowPriorityIncidents = async (req, res) => {
+  try {
+    const incidents = await Incident.find({ priority: 'low' }).sort({ createdAt: -1 });
+    res.status(200).json({
+      success: true,
+      count: incidents.length,
+      data: incidents
+    });
+  }catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: 'Error fetching low priority reports',
+      error: error.message
+    });
+  }
+    };
+    
+//ADMIN: get all medium priority reports
+exports.getAllMediumPriorityIncidents = async (req, res) => {
+  try {
+    const incidents = await Incident.find({ priority: 'medium' }).sort({ createdAt: -1 });
+    res.status(200).json({
+      success: true,
+      count: incidents.length,
+      data: incidents
+    });
+  }catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: 'Error fetching medium priority reports',
+      error: error.message
+    });
+  }
+  };
 
+//ADMIN: get all high priority reports
+exports.getAllHighPriorityIncidents = async (req, res) => {
+  try {
+    const incidents = await Incident.find({ priority: 'high' }).sort({ createdAt: -1 });
+    res.status(200).json({
+      success: true,
+      count: incidents.length,
+      data: incidents
+    });
+  }catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: 'Error fetching high priority reports',
+      error: error.message
+    });
+  }
+};
 //ADMIN: Delete report
 exports.deleteIncident = async (req, res) => {
   try {

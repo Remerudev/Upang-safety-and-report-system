@@ -13,6 +13,9 @@ router.get("/admin/all", IncidentController.getAllIncidents); //admin get all re
 router.get("/admin/pending", IncidentController.getAllPendingIncidents); //admin get all pending reports
 router.get("/admin/under-review", IncidentController.getAllUnderReviewIncidents); //admin get all under review reports
 router.get("/admin/resolved", IncidentController.getAllResolvedIncidents); //admin get all resolved reports
+router.get("/admin/low-priority", IncidentController.getAllLowPriorityIncidents); //admin get all low priority reports
+router.get("/admin/medium-priority", IncidentController.getAllMediumPriorityIncidents); //admin get all medium priority reports
+router.get("/admin/high-priority", IncidentController.getAllHighPriorityIncidents); //admin get all high priority reports
 
 // Generic admin routes AFTER specific ones
 router.get("/admin/:id", IncidentController.getIncidentById); //admin get report by ID

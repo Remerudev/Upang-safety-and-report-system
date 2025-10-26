@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const IncidentSchema = new mongoose.Schema({
     reportnumber: {type: String, unique: true},
-    title: {type: String, required: [true, 'Please select a category'], enum: ['security issues', 'property damage', ' missing equipment', 'equipment malfunction', 'others']},
+    title: {type: String, required: [true, 'Please select a category'], enum: [ 'property damage', ' missing equipment', 'equipment malfunction', '']},
     description:{type: String, required: true},
     location: {type: String, required: [true, 'Please provide a location'], enum:['PTC Building', 'CHS Building', 'BASIC ED Building', 'Student Plaza',
       'Gym', 'Phinma Garden', 'CMA Building', 'FVR Building', 'MBA Building', 'River Side Building', 'NH Building', 'parking lot', 'others']},
